@@ -27,6 +27,7 @@ class CryptoInfoAdapter :
         holder.bind(cryptoInfo)
     }
 
+    // TODO : Fix List & Filter
     /*fun submitList(list: List<CryptoInfo>) {
         cryptoList = list
         filteredCryptoList = list
@@ -69,7 +70,7 @@ class CryptoInfoAdapter :
                 binding.cryptoPriceTv.text = "Invalid Price"
                 return
             }
-            val formattedPercent = String.format("%.3f", percent)
+            val formattedPercent = String.format("%.2f", percent)
 
             val percentColor = if (percent ?: 0f >= 0) android.R.color.holo_green_dark else android.R.color.holo_red_dark
             val formattedPercentSpannable = SpannableString("($formattedPercent)")

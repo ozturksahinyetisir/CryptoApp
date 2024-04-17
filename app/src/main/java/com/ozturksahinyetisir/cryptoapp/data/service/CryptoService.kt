@@ -6,6 +6,7 @@ import com.ozturksahinyetisir.cryptoapp.util.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+//TODO CryptoService set
 object CryptoService {
     private val gson: Gson = GsonBuilder().create()
 

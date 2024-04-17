@@ -1,36 +1,55 @@
 package com.ozturksahinyetisir.cryptoapp.data.repository
 
+import androidx.lifecycle.LiveData
 import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
-import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfoResponse
+import com.ozturksahinyetisir.cryptoapp.data.room.CryptoDao
 import com.ozturksahinyetisir.cryptoapp.data.service.CryptoApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import javax.inject.Inject
 
-class CryptoRepository @Inject constructor(private val cryptoApi: CryptoApi) {
+class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, private val apiService: CryptoApi) {
 
-    fun getCryptoList(
-        onSuccess: (cryptoList: List<CryptoInfo>) -> Unit,
-        onFailure: (error: String) -> Unit
-    ) {
-        val call: Call<CryptoInfoResponse> = cryptoApi.getCryptoList()
+    val allCryptos: LiveData<List<CryptoInfo>> = cryptoDao.getAllCryptos()
 
-        call.enqueue(object : Callback<CryptoInfoResponse> {
-            override fun onResponse(call: Call<CryptoInfoResponse>, response: Response<CryptoInfoResponse>) {
-                if (response.isSuccessful) {
-                    val cryptoInfoResponse: CryptoInfoResponse? = response.body()
-                    val cryptoList: List<CryptoInfo>? = cryptoInfoResponse?.data
-
-                    cryptoList?.let { onSuccess(it) }
+    suspend fun refreshCryptos() {
+        withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.fetchCryptos()
+                if (response.isSuccessful && response.body() != null) {
+                    cryptoDao.insertAll(response.body()!!.data)
                 } else {
-                    onFailure("Response not successful: ${response.code()}")
+                    throw HttpException(response)
+                }
+            } catch (e: Exception) {
+
+                throw e
+            }
+        }
+    }
+
+    // TODO : Check if the local database is empty
+    suspend fun getInitialCryptos(): LiveData<List<CryptoInfo>> {
+        withContext(Dispatchers.IO) {
+            if (cryptoDao.getCount() == 0) {
+                try {
+                    val response = apiService.fetchCryptos()
+                    if (response.isSuccessful && response.body() != null) {
+                        cryptoDao.insertAll(response.body()!!.data)
+                    } else {
+                        throw HttpException(response)
+                    }
+                } catch (e: Exception) {
+                    // TODO: Log.e
                 }
             }
+        }
+        return allCryptos
+    }
 
-            override fun onFailure(call: Call<CryptoInfoResponse>, t: Throwable) {
-                onFailure("API call failed: ${t.message}")
-            }
-        })
+    //TODO: Fix search query
+    fun searchCryptos(query: String): LiveData<List<CryptoInfo>> {
+        return cryptoDao.searchCryptos("%$query%")
     }
 }
