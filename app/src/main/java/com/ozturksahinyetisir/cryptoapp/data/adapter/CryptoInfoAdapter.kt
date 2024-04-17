@@ -6,15 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
 import com.ozturksahinyetisir.cryptoapp.databinding.ItemCryptoInfoBinding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
 
 
 class CryptoInfoAdapter :
     ListAdapter<CryptoInfo, CryptoInfoAdapter.CryptoInfoViewHolder>(CryptoInfoDiffCallback()) {
-
+    var cryptoList: List<CryptoInfo> = listOf()
+    var filteredCryptoList: List<CryptoInfo> = listOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoInfoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemCryptoInfoBinding.inflate(inflater, parent, false)
@@ -25,6 +26,36 @@ class CryptoInfoAdapter :
         val cryptoInfo = getItem(position)
         holder.bind(cryptoInfo)
     }
+
+    /*fun submitList(list: List<CryptoInfo>) {
+        cryptoList = list
+        filteredCryptoList = list
+        notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filteredList = if (constraint.isNullOrEmpty()) {
+                    cryptoList
+                } else {
+                    val filterPattern = constraint.toString().toLowerCase().trim()
+                    cryptoList.filter {
+                        it.name.toLowerCase().contains(filterPattern)
+                    }
+                }
+
+                val results = FilterResults()
+                results.values = filteredList
+                return results
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredCryptoList = results?.values as List<CryptoInfo>
+                notifyDataSetChanged()
+            }
+        }
+    }*/
 
     inner class CryptoInfoViewHolder(private val binding: ItemCryptoInfoBinding) :
         RecyclerView.ViewHolder(binding.root) {

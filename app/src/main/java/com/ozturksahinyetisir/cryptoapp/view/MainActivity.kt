@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.ozturksahinyetisir.cryptoapp.R
 import com.ozturksahinyetisir.cryptoapp.viewmodels.SharedViewModel
-import com.ozturksahinyetisir.cryptoapp.data.service.RetrofitService
+import com.ozturksahinyetisir.cryptoapp.data.service.CryptoService
 import com.ozturksahinyetisir.cryptoapp.databinding.ActivityMainBinding
 import androidx.navigation.ui.NavigationUI
 import com.ozturksahinyetisir.cryptoapp.data.repository.CryptoRepository
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val cryptoRepository = CryptoRepository(RetrofitService.api)
+        val cryptoRepository = CryptoRepository(CryptoService.api)
         cryptoRepository.getCryptoList(
             onSuccess = { cryptoList ->
                 cryptoList.forEach { cryptoInfo ->

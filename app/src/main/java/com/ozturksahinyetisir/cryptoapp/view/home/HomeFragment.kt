@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,6 +32,21 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /**
+         * expands search view clickable part & focus.
+         */
+
+        val searchView = binding.searchView
+        searchView.setOnClickListener {
+            searchView.onActionViewExpanded()
+        }
+
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                searchView.context.getSystemService(InputMethodManager::class.java)?.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
 
         cryptoInfoAdapter = CryptoInfoAdapter()
 

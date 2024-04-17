@@ -1,7 +1,17 @@
 package com.ozturksahinyetisir.cryptoapp.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.ozturksahinyetisir.cryptoapp.util.PlatformConverter
+import com.ozturksahinyetisir.cryptoapp.util.QuoteConverter
+import com.ozturksahinyetisir.cryptoapp.util.TagsConverter
+
+
+@Entity(tableName = "crypto_info")
+@TypeConverters(TagsConverter::class, PlatformConverter::class, QuoteConverter::class)
 data class CryptoInfo(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val name: String,
     val symbol: String,
     val slug: String,

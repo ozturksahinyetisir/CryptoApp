@@ -1,13 +1,17 @@
 package com.ozturksahinyetisir.cryptoapp.data.service
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ozturksahinyetisir.cryptoapp.util.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitService {
-    private val retrofit = Retrofit.Builder()
+object CryptoService {
+    private val gson: Gson = GsonBuilder().create()
+
+    private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     val api: CryptoApi by lazy {
