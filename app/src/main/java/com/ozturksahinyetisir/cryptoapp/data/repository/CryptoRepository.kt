@@ -13,26 +13,11 @@ class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, pri
 
     val allCryptos: LiveData<List<CryptoInfo>> = cryptoDao.getAllCryptos()
 
-    suspend fun refreshCryptos() {
+    suspend fun refreshCryptos(forceUpdate: Boolean = false) {
         withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.fetchCryptos()
-                if (response.isSuccessful && response.body() != null) {
-                    cryptoDao.insertAll(response.body()!!.data)
-                } else {
-                    throw HttpException(response)
-                }
-            } catch (e: Exception) {
-
-                throw e
-            }
-        }
-    }
-
-    // TODO : Check if the local database is empty
-    suspend fun getInitialCryptos(): LiveData<List<CryptoInfo>> {
-        withContext(Dispatchers.IO) {
-            if (cryptoDao.getCount() == 0) {
+            // TODO : forceUpdate set or remove.
+            val shouldFetch = forceUpdate || cryptoDao.getCount() == 0
+            if (shouldFetch) {
                 try {
                     val response = apiService.fetchCryptos()
                     if (response.isSuccessful && response.body() != null) {
@@ -41,11 +26,11 @@ class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, pri
                         throw HttpException(response)
                     }
                 } catch (e: Exception) {
-                    // TODO: Log.e
+
+                    throw e
                 }
             }
         }
-        return allCryptos
     }
 
     //TODO: Fix search query

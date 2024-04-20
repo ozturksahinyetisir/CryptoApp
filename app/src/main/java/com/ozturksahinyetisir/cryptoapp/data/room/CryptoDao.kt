@@ -13,7 +13,7 @@ interface CryptoDao{
     fun searchCryptos(query: String): LiveData<List<CryptoInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(cryptos: List<com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo>)
+    suspend fun insertAll(cryptos: List<CryptoInfo>)
 
     @Query("SELECT * FROM crypto_info")
     fun getAllCryptos(): LiveData<List<CryptoInfo>>
