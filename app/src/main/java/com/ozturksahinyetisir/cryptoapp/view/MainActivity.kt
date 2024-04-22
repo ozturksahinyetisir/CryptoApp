@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+
+
     }
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, null)
