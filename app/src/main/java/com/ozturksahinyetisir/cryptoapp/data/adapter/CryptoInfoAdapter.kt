@@ -9,70 +9,38 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ozturksahinyetisir.cryptoapp.databinding.ItemCryptoInfoBinding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.ozturksahinyetisir.cryptoapp.R
 import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
 
 
-class CryptoInfoAdapter :
-    ListAdapter<CryptoInfo, CryptoInfoAdapter.CryptoInfoViewHolder>(CryptoInfoDiffCallback()) {
-    var cryptoList: List<CryptoInfo> = listOf()
-    var filteredCryptoList: List<CryptoInfo> = listOf()
+class CryptoInfoAdapter : ListAdapter<CryptoInfo, CryptoInfoAdapter.CryptoInfoViewHolder>(CryptoInfoDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoInfoViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemCryptoInfoBinding.inflate(inflater, parent, false)
+        val binding = ItemCryptoInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CryptoInfoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CryptoInfoViewHolder, position: Int) {
-        val cryptoInfo = getItem(position)
-        holder.bind(cryptoInfo)
+        val sortedList = currentList.sortedBy { it.cmc_rank }
+        val crypto = sortedList[position]
+        holder.bind(crypto)
     }
+
 
     // TODO : Fix List & Filter
-    /*fun submitList(list: List<CryptoInfo>) {
-        cryptoList = list
-        filteredCryptoList = list
-        notifyDataSetChanged()
-    }
-
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = if (constraint.isNullOrEmpty()) {
-                    cryptoList
-                } else {
-                    val filterPattern = constraint.toString().toLowerCase().trim()
-                    cryptoList.filter {
-                        it.name.toLowerCase().contains(filterPattern)
-                    }
-                }
-
-                val results = FilterResults()
-                results.values = filteredList
-                return results
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredCryptoList = results?.values as List<CryptoInfo>
-                notifyDataSetChanged()
-            }
-        }
-    }*/
-
-    inner class CryptoInfoViewHolder(private val binding: ItemCryptoInfoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class CryptoInfoViewHolder(private val binding: ItemCryptoInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(cryptoInfo: CryptoInfo) {
             val price = cryptoInfo.quote.USD.price.toString().toFloatOrNull()
             val percent = cryptoInfo.quote.USD.percent_change_24h.toString().toFloatOrNull()
-            val rank = cryptoInfo.cmc_rank
 
             if (price == null || price < 0) {
-                binding.cryptoPriceTv.text = "Invalid Price"
+                binding.cryptoPriceTv.setText(R.string.invalid_price)
                 return
             }
             val formattedPercent = String.format("%.2f", percent)
 
-            val percentColor = if (percent ?: 0f >= 0) android.R.color.holo_green_dark else android.R.color.holo_red_dark
+            val percentColor = if ((percent ?: 0f) >= 0) android.R.color.holo_green_dark else android.R.color.holo_red_dark
             val formattedPercentSpannable = SpannableString("($formattedPercent)")
             formattedPercentSpannable.setSpan(
                 ForegroundColorSpan(ContextCompat.getColor(binding.root.context, percentColor)),

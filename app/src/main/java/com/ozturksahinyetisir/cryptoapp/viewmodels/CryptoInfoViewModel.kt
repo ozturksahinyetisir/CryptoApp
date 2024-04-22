@@ -14,15 +14,12 @@ import androidx.lifecycle.MutableLiveData
 @HiltViewModel
 class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: CryptoRepository) : ViewModel() {
 
-    val cryptoInfoList: LiveData<List<CryptoInfo>> = cryptoRepository.allCryptos
-
     private val _cryptoInfoList = MutableLiveData<Resource<List<CryptoInfo>>>()
-    val cryptoInfoResource: LiveData<Resource<List<CryptoInfo>>> = _cryptoInfoList
-
+    val allCryptos: LiveData<List<CryptoInfo>> = cryptoRepository.allCryptos
     init {
         refreshCryptos()
     }
-    private fun refreshCryptos() {
+    fun refreshCryptos() {
         viewModelScope.launch {
             _cryptoInfoList.postValue(Resource.Loading())
             try {
@@ -33,8 +30,5 @@ class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: Cryp
             }
         }
     }
-
-    // TODO: Search Query
-
 }
 

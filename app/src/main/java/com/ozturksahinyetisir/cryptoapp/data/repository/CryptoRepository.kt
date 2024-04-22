@@ -1,5 +1,6 @@
 package com.ozturksahinyetisir.cryptoapp.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
 import com.ozturksahinyetisir.cryptoapp.data.room.CryptoDao
@@ -13,22 +14,20 @@ class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, pri
 
     val allCryptos: LiveData<List<CryptoInfo>> = cryptoDao.getAllCryptos()
 
-    suspend fun refreshCryptos(forceUpdate: Boolean = false) {
+    suspend fun refreshCryptos() {
         withContext(Dispatchers.IO) {
-            // TODO : forceUpdate set or remove.
-            val shouldFetch = forceUpdate || cryptoDao.getCount() == 0
-            if (shouldFetch) {
-                try {
-                    val response = apiService.fetchCryptos()
-                    if (response.isSuccessful && response.body() != null) {
-                        cryptoDao.insertAll(response.body()!!.data)
-                    } else {
-                        throw HttpException(response)
-                    }
-                } catch (e: Exception) {
-
-                    throw e
+            try {
+                val response = apiService.fetchCryptos()
+                if (response.isSuccessful && response.body() != null) {
+                    val cryptoList = response.body()!!.data
+                    cryptoDao.insertAll(cryptoList)
+                    Log.d("CryptoRepository", "Cryptos refreshed and inserted to DB.")
+                } else {
+                    throw HttpException(response)
                 }
+            } catch (e: Exception) {
+                Log.e("CryptoRepository", "Error refreshing cryptos: ${e.message}")
+                throw e
             }
         }
     }
