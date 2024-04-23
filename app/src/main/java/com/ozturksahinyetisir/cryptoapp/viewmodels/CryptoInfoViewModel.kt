@@ -42,8 +42,7 @@ class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: Cryp
             try {
                 val allCryptos = cryptoRepository.allCryptos.value ?: emptyList()
                 val filteredList = allCryptos.filter { crypto ->
-                    // Hem kripto isminde hem de sembolünde tam eşleşme kontrolü yapalım
-                    crypto.name.equals(query, ignoreCase = true) || crypto.symbol.equals(query, ignoreCase = true)
+                   crypto.name.equals(query, ignoreCase = true) || crypto.symbol.equals(query, ignoreCase = true)
                 }
                 _filteredCryptoInfoList.postValue(filteredList)
             } catch (e: Exception) {

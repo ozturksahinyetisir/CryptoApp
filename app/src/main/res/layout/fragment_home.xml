@@ -54,6 +54,19 @@
             app:layout_constraintTop_toTopOf="@+id/appNameTv"
             android:layout_marginStart="10dp" />
 
+        <ImageButton
+            android:id="@+id/accountImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/desc_account_icon"
+            android:src="@drawable/ic_account"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginEnd="10dp"
+            app:tint="@color/timberwolf"
+            app:layout_constraintBottom_toBottomOf="@+id/appNameTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appNameTv" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/balanceCardView"
             android:layout_width="0dp"
@@ -132,6 +145,8 @@
                     android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:queryHint="Search Crypto"
+                    app:iconifiedByDefault="false"
                     android:background="@android:color/white"
                     />
             </androidx.cardview.widget.CardView>
