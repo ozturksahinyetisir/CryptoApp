@@ -9,4 +9,5 @@
     <string name="welcome_text">Welcome to</string>
     <string name="refresh">Refresh</string>
     <string name="invalid_price">Invalid Price</string>
+    <string name="desc_account_icon">Account Icon</string>
 </resources>
