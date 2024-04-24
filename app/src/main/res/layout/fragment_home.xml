@@ -61,11 +61,12 @@
             android:contentDescription="@string/desc_account_icon"
             android:src="@drawable/ic_account"
             android:background="?android:attr/selectableItemBackground"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
             app:tint="@color/timberwolf"
-            app:layout_constraintBottom_toBottomOf="@+id/appNameTv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appNameTv" />
+            app:layout_constraintTop_toTopOf="parent
+"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/balanceCardView"

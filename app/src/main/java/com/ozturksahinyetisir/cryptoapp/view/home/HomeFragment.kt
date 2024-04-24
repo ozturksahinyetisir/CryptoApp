@@ -10,11 +10,14 @@ import android.widget.ImageButton
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ozturksahinyetisir.cryptoapp.R
 import com.ozturksahinyetisir.cryptoapp.data.adapter.CryptoInfoAdapter
 import com.ozturksahinyetisir.cryptoapp.databinding.FragmentHomeBinding
 import com.ozturksahinyetisir.cryptoapp.util.RefreshCountDownTimer
+import com.ozturksahinyetisir.cryptoapp.view.account.AccountFragment
 import com.ozturksahinyetisir.cryptoapp.viewmodels.CryptoInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,6 +46,14 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = cryptoInfoAdapter
         }
+
+        binding.accountImage.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_container, AccountFragment())
+                //.addToBackStack(null) removed stack lag
+                .commit()
+        }
+
 
         Log.d("Home","home fragment created.")
         observeCryptoInfoList()
