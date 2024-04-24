@@ -3,11 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/oxfordblue">
 
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Asset"
+        android:textColor="@color/orange"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:gravity="start"
+        android:background="@color/oxfordblue"
+        />
     <Spinner
         android:id="@+id/spinnerAsset"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/timberwolf"/>
+
+    <EditText
+        android:id="@+id/editTextAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount"
+        android:inputType="numberDecimal"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:textColor="@color/timberwolf"
+        android:textColorHint="@color/timberwolf"/>
 
 </LinearLayout>

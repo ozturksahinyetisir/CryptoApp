@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.ozturksahinyetisir.cryptoapp.R
-import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
-import com.ozturksahinyetisir.cryptoapp.data.repository.CryptoRepository
-import com.ozturksahinyetisir.cryptoapp.data.service.CryptoApi
 import com.ozturksahinyetisir.cryptoapp.databinding.FragmentAccountBinding
 import com.ozturksahinyetisir.cryptoapp.view.home.HomeFragment
 import com.ozturksahinyetisir.cryptoapp.viewmodels.CryptoInfoViewModel
@@ -49,6 +49,7 @@ class AccountFragment : Fragment() {
     private fun showAddAssetDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_new_asset, null)
         val spinnerAsset: Spinner = dialogView.findViewById(R.id.spinnerAsset)
+        val editTextAmount: EditText = dialogView.findViewById(R.id.editTextAmount)
 
         val assetNames = cryptoInfoViewModel.getAllCryptoNames()
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, assetNames)
@@ -56,14 +57,12 @@ class AccountFragment : Fragment() {
         spinnerAsset.adapter = adapter
 
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Add Asset")
             .setView(dialogView)
             .setPositiveButton("Add") { dialog, _ ->
-
                 val selectedAssetName = assetNames[spinnerAsset.selectedItemPosition]
-                val amount = 0.0
+                val amount = editTextAmount.text.toString().toDoubleOrNull() ?: 0.0
 
-               Toast.makeText(requireContext(), "Selected: $selectedAssetName, Amount: $amount", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Selected: $selectedAssetName, Amount: $amount", Toast.LENGTH_SHORT).show()
 
                 dialog.dismiss()
             }
@@ -72,6 +71,10 @@ class AccountFragment : Fragment() {
             }
             .create()
 
+        val titleTextView = dialog.findViewById<TextView>(R.id.dialogTitle)
+        titleTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+
+        dialog.window?.setBackgroundDrawableResource(R.color.oxfordblue)
         dialog.show()
     }
 }
