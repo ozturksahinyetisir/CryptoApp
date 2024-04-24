@@ -1,18 +1,30 @@
 package com.ozturksahinyetisir.cryptoapp.view.account
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.ozturksahinyetisir.cryptoapp.R
+import com.ozturksahinyetisir.cryptoapp.data.model.CryptoInfo
+import com.ozturksahinyetisir.cryptoapp.data.repository.CryptoRepository
+import com.ozturksahinyetisir.cryptoapp.data.service.CryptoApi
 import com.ozturksahinyetisir.cryptoapp.databinding.FragmentAccountBinding
 import com.ozturksahinyetisir.cryptoapp.view.home.HomeFragment
+import com.ozturksahinyetisir.cryptoapp.viewmodels.CryptoInfoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+    private val cryptoInfoViewModel: CryptoInfoViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,5 +41,37 @@ class AccountFragment : Fragment() {
                 .commit()
         }
 
+        binding.addButton.setOnClickListener {
+            showAddAssetDialog()
         }
+
+        }
+    private fun showAddAssetDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_new_asset, null)
+        val spinnerAsset: Spinner = dialogView.findViewById(R.id.spinnerAsset)
+
+        val assetNames = cryptoInfoViewModel.getAllCryptoNames()
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, assetNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerAsset.adapter = adapter
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Add Asset")
+            .setView(dialogView)
+            .setPositiveButton("Add") { dialog, _ ->
+
+                val selectedAssetName = assetNames[spinnerAsset.selectedItemPosition]
+                val amount = 0.0
+
+               Toast.makeText(requireContext(), "Selected: $selectedAssetName, Amount: $amount", Toast.LENGTH_SHORT).show()
+
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
+    }
 }

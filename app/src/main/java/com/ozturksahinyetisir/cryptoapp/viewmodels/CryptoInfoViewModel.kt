@@ -20,7 +20,6 @@ class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: Cryp
 
     private val _filteredCryptoInfoList = MutableLiveData<List<CryptoInfo>>()
     val filteredCryptoInfoList: LiveData<List<CryptoInfo>> = _filteredCryptoInfoList
-
     init {
         refreshCryptos()
     }
@@ -50,6 +49,10 @@ class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: Cryp
                 Log.e("CryptoInfoViewModel", "Error searching cryptos: ${e.message}")
             }
         }
+    }
+
+    fun getAllCryptoNames(): List<String> {
+        return allCryptos.value?.map { it.name } ?: emptyList()
     }
 }
 
