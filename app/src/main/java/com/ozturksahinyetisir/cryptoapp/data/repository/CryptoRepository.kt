@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, private val apiService: CryptoApi) {
+class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, private val apiService: CryptoApi,) {
 
     val allCryptos: LiveData<List<CryptoInfo>> = cryptoDao.getAllCryptos()
 
@@ -36,4 +36,9 @@ class CryptoRepository @Inject constructor(private val cryptoDao: CryptoDao, pri
     fun searchCryptos(query: String): LiveData<List<CryptoInfo>> {
         return cryptoDao.searchCryptos("%$query%")
     }
+
+    fun getCryptoInfoByName(name: String): CryptoInfo? {
+        return cryptoDao.getCryptoInfoByName(name)
+    }
+
 }

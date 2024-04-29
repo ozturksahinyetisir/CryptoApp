@@ -11,9 +11,11 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ozturksahinyetisir.cryptoapp.data.model.MyAsset
+import com.ozturksahinyetisir.cryptoapp.data.repository.MyAssetRepository
 
 @HiltViewModel
-class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: CryptoRepository) : ViewModel() {
+class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: CryptoRepository,private val myAssetRepository: MyAssetRepository) : ViewModel() {
 
     private val _cryptoInfoList = MutableLiveData<Resource<List<CryptoInfo>>>()
     val allCryptos: LiveData<List<CryptoInfo>> = cryptoRepository.allCryptos
@@ -54,5 +56,16 @@ class CryptoInfoViewModel @Inject constructor(private val cryptoRepository: Cryp
     fun getAllCryptoNames(): List<String> {
         return allCryptos.value?.map { it.name } ?: emptyList()
     }
+
+    fun getCryptoInfoByName(name: String): CryptoInfo? {
+        return cryptoRepository.getCryptoInfoByName(name)
+    }
+
+    /*fun insertMyAsset(myAsset: MyAsset) {
+        viewModelScope.launch {
+            myAssetRepository.insertMyAsset(myAsset)
+        }
+    }*/
+
 }
 

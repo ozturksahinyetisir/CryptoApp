@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI
 import com.ozturksahinyetisir.cryptoapp.R
+import com.ozturksahinyetisir.cryptoapp.data.room.AssetDatabase
 import com.ozturksahinyetisir.cryptoapp.databinding.ActivityMainBinding
 import com.ozturksahinyetisir.cryptoapp.view.home.HomeFragment
 import com.ozturksahinyetisir.cryptoapp.view.splash.SplashFragment
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-
+        AssetDatabase.getDatabase(this)
 
     }
     override fun onSupportNavigateUp(): Boolean {

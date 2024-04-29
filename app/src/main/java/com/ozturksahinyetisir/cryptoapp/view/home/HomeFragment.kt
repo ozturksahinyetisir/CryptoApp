@@ -10,16 +10,18 @@ import android.widget.ImageButton
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ozturksahinyetisir.cryptoapp.R
 import com.ozturksahinyetisir.cryptoapp.data.adapter.CryptoInfoAdapter
+import com.ozturksahinyetisir.cryptoapp.data.repository.MyAssetRepository
 import com.ozturksahinyetisir.cryptoapp.databinding.FragmentHomeBinding
 import com.ozturksahinyetisir.cryptoapp.util.RefreshCountDownTimer
 import com.ozturksahinyetisir.cryptoapp.view.account.AccountFragment
 import com.ozturksahinyetisir.cryptoapp.viewmodels.CryptoInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -29,6 +31,8 @@ class HomeFragment : Fragment() {
     private val cryptoInfoViewModel: CryptoInfoViewModel by viewModels()
     private lateinit var cryptoInfoAdapter: CryptoInfoAdapter
     private var countDownTimer: RefreshCountDownTimer? = null
+    @Inject
+    lateinit var myAssetRepository: MyAssetRepository
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,11 +57,11 @@ class HomeFragment : Fragment() {
                 //.addToBackStack(null) removed stack lag
                 .commit()
         }
+        updateBalance()
 
-
-        Log.d("Home","home fragment created.")
         observeCryptoInfoList()
         observeFilteredCryptoInfoList()
+
 
         val refreshButton: ImageButton = binding.buttonRefresh
         refreshButton.setOnClickListener {
@@ -115,5 +119,13 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateBalance() {
+        lifecycleScope.launch {
+            val totalValue: Double = myAssetRepository.getTotalValue() ?: 0.0
+            val formattedValue = String.format("%.2f", totalValue)
+            binding.balanceText.text = formattedValue
+        }
     }
 }

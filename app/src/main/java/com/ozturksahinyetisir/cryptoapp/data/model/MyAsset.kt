@@ -5,10 +5,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "my_assets")
 data class MyAsset(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey
+    (autoGenerate = true)
+    val id: Long = 0,
     val cryptoId: Int,
     val name: String,
     val symbol: String,
     val amount: Double,
-    val price: Double
+    val price: Double,
+    val totalValue: Double? = 0.0
 )

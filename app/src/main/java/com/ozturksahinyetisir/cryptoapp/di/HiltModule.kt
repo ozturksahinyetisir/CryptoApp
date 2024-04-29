@@ -1,6 +1,7 @@
 package com.ozturksahinyetisir.cryptoapp.di
 
 import com.ozturksahinyetisir.cryptoapp.data.repository.CryptoRepository
+import com.ozturksahinyetisir.cryptoapp.data.repository.MyAssetRepository
 import com.ozturksahinyetisir.cryptoapp.data.service.CryptoApi
 import com.ozturksahinyetisir.cryptoapp.util.Constants.BASE_URL
 import com.ozturksahinyetisir.cryptoapp.viewmodels.CryptoInfoViewModel
@@ -19,9 +20,9 @@ object HiltModule {
     @ActivityRetainedScoped
     @Provides
     fun provideCryptoInfoViewModel(
-        cryptoRepository: CryptoRepository
+        cryptoRepository: CryptoRepository,myAssetRepository: MyAssetRepository
     ): CryptoInfoViewModel {
-        return CryptoInfoViewModel(cryptoRepository)
+        return CryptoInfoViewModel(cryptoRepository, myAssetRepository)
     }
 
     @Provides

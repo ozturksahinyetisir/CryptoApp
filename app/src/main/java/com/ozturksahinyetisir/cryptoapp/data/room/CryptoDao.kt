@@ -20,4 +20,9 @@ interface CryptoDao{
 
     @Query("SELECT COUNT(*) FROM crypto_info")
     fun getCount(): Int
+
+    @Query("SELECT * FROM crypto_info WHERE name = :name")
+    fun getCryptoInfoByName(name: String): CryptoInfo?
+
+
 }
